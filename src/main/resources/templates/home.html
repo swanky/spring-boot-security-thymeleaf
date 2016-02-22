@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>Home page</title>
+</head>
+<body>
+<nav role="navigation">
+    <ul>
+        <li th:unless="${currentUser}"><a th:href="@{/login}">Log in</a></li>
+
+        <li th:if="${currentUser}">
+            <form th:action="@{/logout}" method="post">
+                <button type="submit">Log out</button>
+            </form>
+        </li>
+        <li th:if="${currentUser}"><a th:href="@{/user/} + ${currentUser.id}">View myself</a><br />
+        <span th:text="'name:' + ${#authentication.name}" />
+        <span th:text="'email:' + ${currentUser.user.email}" />
+        <span th:text="'role:' + ${currentUser.role}" />
+        </li>
+
+        <li sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/user/create}">Create a new user</a></li>
+        <li sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/users}">View all users</a></li>
+    </ul>
+</nav>
+
+</body>
+</html>
